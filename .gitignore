@@ -24,7 +24,10 @@ build/
 # Project specific
 dados_pessoais.csv
 *.pdf
-*.md
+markdown/*.md
+clean/*.md
+markdown_clean/*.md
+!contextos/*.md
 
 # Logs
 *.log
