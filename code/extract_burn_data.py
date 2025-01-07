@@ -31,27 +31,58 @@ class BurnMechanism(str, Enum):
     RADIATION = "radiation"
     INHALATION = "inhalation"
 
+class Laterality(str, Enum):
+    LEFT = "left"
+    RIGHT = "right"
+    BILATERAL = "bilateral"
+    UNSPECIFIED = "unspecified"
+
 class BurnLocation(BaseModel):
     location: str = Field(description="Body part affected")
     depth: BurnDepth = Field(description="Burn depth for this location")
-    is_critical: bool = Field(description="Whether it's a critical location")
     is_circumferential: bool = Field(description="Whether the burn is circumferential")
+    laterality: Laterality = Field(
+        description="Laterality of the burn (left/right/bilateral/unspecified)",
+        default=Laterality.UNSPECIFIED
+    )
+
+class CompartmentSyndrome(BaseModel):
+    compartment_syndrome: bool = Field(
+        description="Whether compartment syndrome is present",
+        default=False
+    )
+    locations: List[str] = Field(
+        description="Body parts affected by compartment syndrome",
+        default_factory=list
+    )
+    intervention: bool = Field(
+        description="Whether surgical intervention was performed for compartment syndrome",
+        default=False
+    )
 
 class BurnData(BaseModel):
     burn_locations: List[BurnLocation] = Field(
         description="List of burn locations with their depths",
         default_factory=list
     )
-    total_body_surface_area: float = Field(description="Total body surface area affected (%)")
-    mechanism: BurnMechanism = Field(description="Mechanism of injury")
+    total_body_surface_area: float = Field(
+        description="Total body surface area affected (%)"
+    )
+    mechanism: BurnMechanism = Field(
+        description="Mechanism of injury"
+    )
     patient_factors: List[str] = Field(
         description="List of patient factors including age, conditions, and injuries",
         default_factory=list
     )
+    compartment_syndrome: CompartmentSyndrome = Field(
+        description="Information about compartment syndrome if present",
+        default_factory=CompartmentSyndrome
+    )
 
 def read_md_file(filename):
     """Read content from a markdown file in the clean folder"""
-    file_path = os.path.join('markdown_clean', filename)
+    file_path = os.path.join('markdown_clean/merged', filename)
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
             return file.read()
@@ -79,7 +110,7 @@ agent = Agent(
 def extract_burn_data(filename):
     """Extract burn data from markdown file"""
     md_content = read_md_file(filename)
-    if md_content:
+    if (md_content):
         try:
             result = agent.run_sync(md_content)
             return result.data if result else None
@@ -89,6 +120,6 @@ def extract_burn_data(filename):
     return None
 
 if __name__ == "__main__":
-    result = extract_burn_data('1103-56-E.md')
+    result = extract_burn_data('1106_merged.md')
     if result:
         print(result.model_dump_json(indent=2))

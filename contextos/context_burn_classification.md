@@ -4,10 +4,7 @@
 # burn depth
 - first-degree burn (queimadura de 1º grau, 1ºG)
 	- superficial
-	- red, painful, dry, no blisters
 - second-degree burn (queimadura de 2º grau, 2ºG)
-	- partial thickness
-		- involves epidermis and part of dermis
 	- can be either
 		- superficial
 			- blisters, painful, moist
@@ -15,11 +12,9 @@
 			- blisters easily unroofed, less painful, dry
 - third-degree (queimadura de 3º grau, 3ºG)
 	- full thickness
-		- white, leathery, painless, dry
 - fourth-degree
 	- extends beyond skin to involve underlying tissues
 		- such as muscle and bone
-	- charred, dry, painless
 
 # burn size
 - described in percentage of body surface area
@@ -30,13 +25,50 @@
 
 # burn location
 - described as body locations
-- critical locations are
-	- face
-	- hands
-	- genitalia
-	- perineum
-	- major joints
-- can be circumferential
+- The locations are described in the following table with 2 columns. The first column is the burn location. The second column is the SNOMED CT code.
+
+| Burn Location | SNOMED CT Concept (ID) |
+| :---- | :---- |
+| Head and Neck |  |
+| Scalp | 41695006 |
+| Face | 89545001 |
+| Ear | 117590005 |
+| Eye | 81745001 |
+| Nose | 45206002 |
+| Mouth | 123851003 |
+| Neck | 45048000 |
+| Upper Extremities |  |
+| Shoulder | 16982005 |
+| Upper arm | 40983000 |
+| Elbow | 127949000 |
+| Forearm | 14975008 |
+| Wrist | 8205005 |
+| Hand | 85562004 |
+| Fingers | 7569003 |
+| Trunk |  |
+| Thorax | 51185008 |
+| Abdomen | 818983003 |
+| Back of trunk | 77568009 |
+| Genital structure | 71934003 |
+| Perineum | 38864007 |
+| Lower Extremities |  |
+| Hip | 29836001 |
+| Thigh | 68367000 |
+| Knee | 72696002 |
+| Lower leg | 30021000 |
+| Ankle | 344001 |
+| Foot | 56459004 |
+| Toes | 29707007 |
+
+If the location is stated in the text but  is not specific enough, classify it using this list, according to the location:
+
+- Head and neck: unspecified  
+- Upper extremities: unspecified  
+- Trunk: unspecified  
+- Lower extremities: unspecified
+
+# circunferencial burns
+- burns can be circumferential
 	- in a limb or torso
 	- can lead to compartment syndrome
 
@@ -49,7 +81,6 @@
 	- high voltage
 	- low voltage
 - chemical
-	- mention if it is identified
 	- acid
 	- alkaline
 	- organic solvents
