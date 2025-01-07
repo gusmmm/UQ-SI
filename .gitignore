@@ -22,7 +22,7 @@ build/
 *.code-workspace
 
 # Project specific
-dados_pessoais.csv
+*.csv
 originais/
 *.pdf
 markdown/
