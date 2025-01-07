@@ -8,11 +8,21 @@ def get_patient_id(filename):
 def get_file_type_header(filename):
     """Return appropriate header based on file type"""
     if filename.endswith('-A.md'):
-        return ">>> NOTA DE ALTA <<<"
+        return ">>> START NOTA DE ALTA <<<"
     elif filename.endswith('-E.md'):
-        return ">>> NOTA DE ENTRADA <<<"
+        return ">>> START NOTA DE ENTRADA <<<"
     elif filename.endswith('-O.md'):
-        return ">>> NOTA DE OBITO <<<"
+        return ">>> START NOTA DE OBITO <<<"
+    return ""
+
+def get_file_type_footer(filename):
+    """Return appropriate footer based on file type"""
+    if filename.endswith('-A.md'):
+        return ">>> END NOTA DE ALTA <<<"
+    elif filename.endswith('-E.md'):
+        return ">>> END NOTA DE ENTRADA <<<"
+    elif filename.endswith('-O.md'):
+        return ">>> END NOTA DE OBITO <<<"
     return ""
 
 def get_file_priority(filename):
@@ -52,10 +62,11 @@ def merge_patient_files():
         for filename in sorted_files:
             file_path = os.path.join(clean_dir, filename)
             header = get_file_type_header(filename)
+            footer = get_file_type_footer(filename)
             
             with open(file_path, 'r', encoding='utf-8') as f:
                 content = f.read()
-                merged_content.append(f"{header}\n{content}\n")
+                merged_content.append(f"{header}\n{content}\n{footer}\n")
         
         # Write merged content
         output_file = os.path.join(output_dir, f"{patient_id}_merged.md")
