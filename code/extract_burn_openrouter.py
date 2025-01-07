@@ -97,6 +97,6 @@ def extract_burn_data(filename):
     return None
 
 if __name__ == "__main__":
-    result = extract_burn_data('1103-56-E.md')
+    result = extract_burn_data('1107-60-E.md')
     if result:
         print(result.model_dump_json(indent=2))

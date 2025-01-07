@@ -9,15 +9,8 @@ def process_file(input_file):
     print(f"Processing {input_file}...")
     # Strings to remove
     remove_strings = [
-        "H. SAO JOAO ALAMEDA PROF. HERNANI MONTEIRO PORTO 4200-319 ULS DE SAO JOAO, E.P.E. Email:",
-        "Tel. : 225512100",
-        "Tel:",
-        "Nº SNS (código de barras):",
         "<!-- image -->",
-        "Data de Criação :",
-        "Data de Bloqueio :",
-        "Versão :",
-        "ULS DE SAO JOAO, E.P.E."
+        
     ]
     
     # Read input file
@@ -57,6 +50,8 @@ def save_output(input_file, cleaned_content):
     print(f"Cleaned file saved as: {output_file}")
 
 ### Main function
-def clean_md(input_file_path):
+def clean_md_O(input_file_path):
     cleaned_content = process_file(input_file_path)
     save_output(input_file_path, cleaned_content)
+
+#clean_md_O('markdown/1111-64-O.md')

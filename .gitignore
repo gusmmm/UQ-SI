@@ -23,10 +23,10 @@ build/
 
 # Project specific
 dados_pessoais.csv
+originais/
 *.pdf
-markdown/*.md
-clean/*.md
-markdown_clean/*.md
+markdown/
+markdown_clean/
 !contextos/*.md
 
 # Logs

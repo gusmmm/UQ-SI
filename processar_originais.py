@@ -1,6 +1,8 @@
 import os
 from code.convert_to_md import convert_to_md
-from code.clean_md import clean_md
+from code.clean_md_E import clean_md_E
+from code.clean_md_A import clean_md_A
+from code.clean_md_O import clean_md_O
 
 # File type constants
 NOTA_ENTRADA = '-E.pdf'    # Notas de entrada
@@ -16,17 +18,18 @@ def process_nota_entrada(input_file, output_file):
     """Process 'nota de entrada' PDF files"""
     print(f"Converting nota de entrada: {input_file}...")
     md_file = convert_to_md(input_file, output_file)
-    clean_md(output_file)
+    clean_md_E(output_file)
 
 def process_nota_alta(input_file, output_file):
     """Process 'nota de alta' PDF files"""
-    # TODO: Implement processing for notas de alta
-    pass
+    print(f"Converting nota de alta: {input_file}...")
+    md_file = convert_to_md(input_file, output_file)
+    clean_md_A(output_file)
 
 def process_cert_obito(input_file, output_file):
-    """Process 'certificado de óbito' PDF files"""
-    # TODO: Implement processing for certificados de óbito
-    pass
+    print(f"Converting nota de obito: {input_file}...")
+    md_file = convert_to_md(input_file, output_file)
+    clean_md_O(output_file)
 
 def main():
     """
