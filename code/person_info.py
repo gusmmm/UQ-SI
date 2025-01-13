@@ -21,12 +21,12 @@ class Person(BaseModel):
 
 def read_md_file(filename):
     """Read content from a markdown file in the clean folder"""
-    file_path = os.path.join('markdown_clean', filename)
+    #file_path = os.path.join('markdown_clean', filename)
     try:
-        with open(file_path, 'r', encoding='utf-8') as file:
+        with open(filename, 'r', encoding='utf-8') as file:
             return file.read()
     except FileNotFoundError:
-        print(f"File {file_path} not found")
+        print(f"File {filename} not found")
         return None
 
 # Create Gemini agent
@@ -39,8 +39,9 @@ agent = Agent(
     - Location if mentioned, extract just the name of the city or region
     - The person's gender (M/F), if present
     - Date of birth in format dd-mm-yyyy, if available it is usually mentioned before "Data Nasc:". If it is not there it is before the patient's name.
-    - Process number, if available, usually mentioned before the expression Nº Processo: .
-    If any field is not found, use an empty string.
+    - Process number, if available, usually in the first few lines  of the note, usually mentioned before the expression Nº Processo: .
+    If the data is contradictory, use the one in the section between ">>> START NOTA DE ENTRADA <<<" and ">>> END NOTA DE ENTRADA <<<".
+    If any field is not found, use an NULL.
     """
 )
 

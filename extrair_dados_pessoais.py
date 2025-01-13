@@ -3,10 +3,14 @@ import os
 import csv
 from pathlib import Path
 
+def get_patient_id(filename):
+    """Extract patient ID from filename (only digits)"""
+    return ''.join(c for c in filename if c.isdigit())
+
 def process_all_files():
     """Process all MD files and save results to CSV"""
     # CSV headers based on Person model fields
-    headers = ['filename', 'name', 'location', 'gender', 'birth_date', 'process_number']
+    headers = ['patient_id', 'name', 'location', 'gender', 'birth_date', 'process_number']
     
     # Create/open CSV file
     with open('dados_pessoais.csv', 'w', newline='', encoding='utf-8') as csvfile:
@@ -14,16 +18,16 @@ def process_all_files():
         writer.writeheader()
         
         # Process each MD file
-        clean_dir = 'markdown_clean'
+        clean_dir = 'markdown_clean/merged'
         for filename in os.listdir(clean_dir):
             if filename.endswith('.md'):
                 print(f"Processing {filename}...")
                 try:
-                    result = extract_person_info(filename)
+                    result = extract_person_info(os.path.join(clean_dir, filename))
                     if result:
                         # Write data to CSV
                         writer.writerow({
-                            'filename': filename,
+                            'patient_id': get_patient_id(filename),
                             'name': result.name,
                             'location': result.location,
                             'gender': result.gender,
