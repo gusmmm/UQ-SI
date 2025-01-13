@@ -22,6 +22,14 @@ class Person(BaseModel):
     origin: str = Field(description="Where patient came from before burn unit admission", default="NULL")
     data_alta: str = Field(description="The discharge date from burn unit (dd-mm-yyyy)", default="NULL")
     destination: str = Field(description="Where patient was discharged to", default="NULL")
+    
+    # New burn-specific fields
+    tbsa: float = Field(description="Total body surface area burned (%)", default=0.0)
+    burn_mechanism: str = Field(
+        description="Primary burn mechanism (thermal-scald, thermal-flame, thermal-contact, thermal-flash, chemical, electrical, radiation, friction)",
+        default="NULL"
+    )
+    burn_etiology: str = Field(description="Specific cause or agent of the burn", default="NULL")
 
 def read_md_file(filename):
     """Read content from a markdown file in the clean folder"""
@@ -33,11 +41,19 @@ def read_md_file(filename):
         print(f"File {filename} not found")
         return None
 
+# Load burn classification context
+with open('contextos/burn_class.md', 'r') as f:
+    BURN_CONTEXT = f.read()
+
 # Create Gemini agent
 agent = Agent(
     'gemini-2.0-flash-exp',
     result_type=Person,
-    system_prompt="""
+    system_prompt=f"""
+    Using this burn classification context:
+    
+    {BURN_CONTEXT}
+    
     Extract the following information from the Portuguese text:
     - Full name of the person
     - Location if mentioned, extract just the name of the city or region
@@ -60,6 +76,17 @@ agent = Agent(
       * Look in the section between ">>> START NOTA DE ALTA <<<" and ">>> END NOTA DE ALTA <<<")
     If the data is contradictory, use the one in the appropriate section (ENTRADA or ALTA).
     If any field is not found, use NULL.
+    
+    Additionally, extract burn injury information:
+    - TBSA (Total Body Surface Area): Look for "SCQ" or "SCQT" followed by a percentage.
+      Convert to a number (remove % symbol).
+    - Burn mechanism: Classify according to the provided burn classification guide.
+      Look for keywords indicating thermal (scald/flame/contact/flash), chemical,
+      electrical, radiation, or friction burns.
+    - Burn etiology: Extract the specific agent or cause (e.g., hot water, fire,
+      specific chemical name, voltage level for electrical burns).
+    
+    If any field is not found, use NULL for text fields or 0 for numeric fields.
     """
 )
 

@@ -10,8 +10,11 @@ def get_patient_id(filename):
 def process_all_files():
     """Process all MD files and save results to CSV"""
     # CSV headers based on Person model fields
-    headers = ['patient_id', 'process_number', 'name', 'location', 'gender', 
-              'birth_date', 'admission_date', 'origin', 'data_alta', 'destination']
+    headers = [
+        'patient_id', 'process_number', 'name', 'location', 'gender', 
+        'birth_date', 'admission_date', 'origin', 'data_alta', 'destination',
+        'tbsa', 'burn_mechanism', 'burn_etiology'
+    ]
     
     # Create/open CSV file
     with open('dados_pessoais.csv', 'w', newline='', encoding='utf-8') as csvfile:
@@ -37,7 +40,10 @@ def process_all_files():
                             'admission_date': result.admission_date,
                             'origin': result.origin,
                             'data_alta': result.data_alta,
-                            'destination': result.destination
+                            'destination': result.destination,
+                            'tbsa': result.tbsa,
+                            'burn_mechanism': result.burn_mechanism,
+                            'burn_etiology': result.burn_etiology
                         })
                     else:
                         print(f"Failed to extract info from {filename}")
