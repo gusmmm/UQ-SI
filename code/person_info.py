@@ -14,10 +14,14 @@ if not GEMINI_API_KEY:
 
 class Person(BaseModel):
     name: str = Field(description="The person's full name")
-    location: str = Field(description="The person's location", default="")
-    gender: str = Field(description="The person's gender (M/F)", default="")
-    birth_date: str = Field(description="The person's date of birth in format dd-mm-yyyy", default="")
-    process_number: str = Field(description="The person's process number", default="")
+    location: str = Field(description="The person's location", default="NULL")
+    gender: str = Field(description="The person's gender (M/F)", default="NULL")
+    birth_date: str = Field(description="The person's birth date (dd-mm-yyyy)", default="NULL")
+    process_number: str = Field(description="The person's process number", default="NULL")
+    admission_date: str = Field(description="The admission date to burn unit (dd-mm-yyyy)", default="NULL")
+    origin: str = Field(description="Where patient came from before burn unit admission", default="NULL")
+    data_alta: str = Field(description="The discharge date from burn unit (dd-mm-yyyy)", default="NULL")
+    destination: str = Field(description="Where patient was discharged to", default="NULL")
 
 def read_md_file(filename):
     """Read content from a markdown file in the clean folder"""
@@ -39,9 +43,23 @@ agent = Agent(
     - Location if mentioned, extract just the name of the city or region
     - The person's gender (M/F), if present
     - Date of birth in format dd-mm-yyyy, if available it is usually mentioned before "Data Nasc:". If it is not there it is before the patient's name.
-    - Process number, if available, usually in the first few lines  of the note, usually mentioned before the expression Nº Processo: .
-    If the data is contradictory, use the one in the section between ">>> START NOTA DE ENTRADA <<<" and ">>> END NOTA DE ENTRADA <<<".
-    If any field is not found, use an NULL.
+    - Process number, if available, usually in the first few lines of the note, usually mentioned before the expression Nº Processo: .
+    - Admission date in format dd-mm-yyyy, usually in the first few lines of the admission note (between ">>> START NOTA DE ENTRADA <<<" and ">>> END NOTA DE ENTRADA <<<")
+    - Origin: where the patient came from before admission to burn unit. Look for:
+      * Hospital services (urgência, internamento, etc)
+      * Other hospitals (usually mentioned with 'transferido de' or 'proveniente de')
+      * Transport services (VMER, HELI, INEM)
+      * Look in the section between ">>> START NOTA DE ENTRADA <<<" and ">>> END NOTA DE ENTRADA <<<")
+    - Data Alta: discharge date in format dd-mm-yyyy (look between ">>> START NOTA DE ALTA <<<" and ">>> END NOTA DE ALTA <<<")
+    - Destination: where patient was discharged to. Look for:
+      * Hospital services (enfermaria, consulta externa, etc)
+      * Other hospitals (mentioned with 'transferido para' or 'enviado para'). In case of another hospital, try and be specific about the hospital name.
+      * Home (domicílio, casa, residência)
+      * Institutions (lar, centro de reabilitação)
+      * deceased (óbito)
+      * Look in the section between ">>> START NOTA DE ALTA <<<" and ">>> END NOTA DE ALTA <<<")
+    If the data is contradictory, use the one in the appropriate section (ENTRADA or ALTA).
+    If any field is not found, use NULL.
     """
 )
 
