@@ -2,38 +2,44 @@ import os
 from collections import defaultdict
 
 def get_patient_id(filename):
-    """Extract patient ID from filename (first 4 characters)"""
-    return filename[:4]
+    """Extract patient ID from filename (only digits)"""
+    return ''.join(c for c in filename if c.isdigit())
 
 def get_file_type_header(filename):
     """Return appropriate header based on file type"""
-    if filename.endswith('-A.md'):
+    if filename.endswith('A.md'):
         return ">>> START NOTA DE ALTA <<<"
-    elif filename.endswith('-E.md'):
+    elif filename.endswith('E.md'):
         return ">>> START NOTA DE ENTRADA <<<"
-    elif filename.endswith('-O.md'):
+    elif filename.endswith('O.md'):
         return ">>> START NOTA DE OBITO <<<"
+    elif filename.endswith('BIC.md'):
+        return ">>> START NOTA DE BIC <<<"
     return ""
 
 def get_file_type_footer(filename):
     """Return appropriate footer based on file type"""
-    if filename.endswith('-A.md'):
+    if filename.endswith('A.md'):
         return ">>> END NOTA DE ALTA <<<"
-    elif filename.endswith('-E.md'):
+    elif filename.endswith('E.md'):
         return ">>> END NOTA DE ENTRADA <<<"
-    elif filename.endswith('-O.md'):
+    elif filename.endswith('O.md'):
         return ">>> END NOTA DE OBITO <<<"
+    elif filename.endswith('BIC.md'):
+        return ">>> END NOTA DE BIC <<<"
     return ""
 
 def get_file_priority(filename):
-    """Return priority value for sorting files (-A first, then -E, then -O)"""
-    if filename.endswith('-E.md'):
-        return 0
-    elif filename.endswith('-A.md'):
+    """Return priority value for sorting files (E first, then A, then BIC, then O)"""
+    if filename.endswith('E.md'):
         return 1
-    elif filename.endswith('-O.md'):
+    elif filename.endswith('A.md'):
         return 2
-    return 3
+    elif filename.endswith('BIC.md'):
+        return 3
+    elif filename.endswith('O.md'):
+        return 4
+    return 5
 
 def merge_patient_files():
     """Merge files by patient ID"""
