@@ -5,9 +5,9 @@ from code.clean_md_A import clean_md_A
 from code.clean_md_O import clean_md_O
 
 # File type constants
-NOTA_ENTRADA = '-E.pdf'    # Notas de entrada
-NOTA_ALTA = '-A.pdf'       # Notas de alta
-CERT_OBITO = '-O.pdf'      # Certificados de óbito
+NOTA_ENTRADA = 'E.pdf'      # Notas de entrada
+NOTA_ALTA = 'A.pdf'         # Notas de alta
+CERT_OBITO = ['O.pdf', 'BIC.pdf']    # Certificados de óbito
 
 def check_if_converted(pdf_path):
     """Check if PDF has already been converted to MD"""
@@ -31,12 +31,16 @@ def process_cert_obito(input_file, output_file):
     md_file = convert_to_md(input_file, output_file)
     clean_md_O(output_file)
 
+def is_death_certificate(pdf_file):
+    """Check if the file is a death certificate"""
+    return any(pdf_file.endswith(cert) for cert in CERT_OBITO)
+
 def main():
     """
     Main function to process different types of medical documents:
-    - Notas de entrada (-E.pdf)
-    - Notas de alta (-A.pdf)
-    - Certificados de óbito (-O.pdf)
+    - Notas de entrada (E.pdf)
+    - Notas de alta (A.pdf)
+    - Certificados de óbito (O.pdf or BIC.pdf)
     """
     originais_dir = 'originais'
     
@@ -56,7 +60,7 @@ def main():
             process_nota_entrada(input_file, output_file)
         elif pdf_file.endswith(NOTA_ALTA):
             process_nota_alta(input_file, output_file)
-        elif pdf_file.endswith(CERT_OBITO):
+        elif is_death_certificate(pdf_file):
             process_cert_obito(input_file, output_file)
 
 if __name__ == "__main__":
